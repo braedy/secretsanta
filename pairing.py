@@ -52,11 +52,12 @@ def main():
     givers_list = read_file() # read csv file
     N = givers_list.__len__() # number of participants
     rand_vec = list(range(N)) # array of indices
-    max_iterations = 1000
+    max_iterations = 5000000
     iteration = 0
     conditions_met = False
+    print "number of participants ", N # number of participants
     # brute force randomisation and checking conditions
-    while iteration<max_iterations and not conditions_met:
+    while not conditions_met:
         iteration += 1           # increment iteration number
         random.shuffle(rand_vec) # randomise array of indices
         conditions_met = True    # unless one of following breaks
@@ -73,15 +74,6 @@ def main():
             elif givers_list[ind][2] == givers_list[rand_vec[ind]][2]:
                 conditions_met = False
                 break
-            # Condition 4: not to person X if your roommate has person X's roommate
-            roommates = [i for i,g in enumerate(givers_list) if g[2] == givers_list[ind][2] and i is not ind] # people with same room number
-            # for roommates of 'ind', check that they do not give to the same 'team'
-            for roommate in roommates:
-                # If A1 -> B1, then NOT A2 -> B2
-                # i.e. check if recepient of ind is not from same room as recipient of roommate
-                if givers_list[rand_vec[ind]][2] == givers_list[rand_vec[roommate]][2]: 
-                    conditions_met = False
-                    break
     write_file(givers_list, rand_vec) # write csv file with pairs
     for ind in range(N): # print in Terminal
         print givers_list[ind][1], "(", givers_list[ind][2], ") to", \
